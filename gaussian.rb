@@ -16,14 +16,15 @@ def gaussian(mean, stddev)
   return x, y
 end
 
-nums = []
-
-100.times do
-  x, y = gaussian(0, 1)
-  nums.push x
-  nums.push y
+def gaussian_set(mean, sd, size)
+  nums = []
+  (size/2).to_i.times do
+    nums.push *gaussian(mean, sd)
+  end
+  nums
 end
 
+nums = gaussian_set(0, 1, 100)
 data = {}
 
 nums.each do |num|
