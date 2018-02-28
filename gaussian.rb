@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'gnuplotrb'
-include GnuplotRB
-
 def floor_float(val, lim)
   (val / lim).round * lim
 end
@@ -33,8 +30,3 @@ def bin_nums(nums, binsize)
   end
   data
 end
-
-nums = gaussian_set(0, 1, 1000)
-data = bin_nums(nums, 0.5)
-
-p data.sort.to_h
