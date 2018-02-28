@@ -39,15 +39,21 @@ sample_pooled[:mean] = sample_individuals.map{ |ind| ind[:mean] }.mean
 sample_pooled[:sd]   = sample_individuals.map{ |ind| ind[:mean] }.standard_deviation
 sample_pooled[:n]    = sample_individuals.inject(0){ |sum, ind| sum + ind[:n] }
 
+puts "Pooled Mean: #{sample_pooled[:mean]}"
+
 mean_rank_order = sample_individuals.sort_by { |ind| ind[:mean] }
 
 puts misplacements(true_order, mean_rank_order)
 
 biased_mean_order = sample_individuals.sort_by do |ind|
-  sample_dev = ind[:sd] / Math.sqrt(ind[:n])
-  pooled_dev = sample_pooled[:sd] / Math.sqrt(sample_pooled[:n])
+  #sample_dev = ind[:sd] / Math.sqrt(ind[:n])
+  #pooled_dev = sample_pooled[:sd] / Math.sqrt(sample_pooled[:n])
+  #ratio = pooled_dev/sample_dev
 
-  (ind[:mean] * pooled_dev/sample_dev) + (sample_pooled[:mean] * sample_dev/pooled_dev)
+  ratio = ind[:sd] / sample_pooled[:sd]
+
+  biased_mean = (ind[:mean] * (1-ratio)) + (sample_pooled[:mean] * (ratio))
+  puts "Ratio: #{ratio.round(2)}\tMean: #{ind[:mean].round(2)}\tBiased Mean: #{biased_mean.round(2)}"
 end
 
 puts misplacements(true_order, biased_mean_order)
