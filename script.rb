@@ -15,5 +15,13 @@ true_pooled = {}
 true_pooled[:mean] = true_individuals.map{ |ind| ind[:mean] }.mean
 true_pooled[:sd]   = true_individuals.map{ |ind| ind[:mean] }.standard_deviation
 
-p true_individuals
-p true_pooled
+sample_individuals = []
+
+(0...INDIVIDUALS).each do |i|
+  sample_individuals[i] = gaussian_set(true_individuals[i][:mean], 
+                                       true_individuals[i][:sd], Random.rand * 50 + 5)
+end
+
+(0...INDIVIDUALS).each do |i|
+  puts "Sample Mean: #{sample_individuals[i].mean} Real Mean: #{true_individuals[i][:mean]}"
+end
