@@ -17,7 +17,7 @@ end
 
 # Returns a geometric mean of an array
 def geom_mean(array)
-  array.reduce(:*) ** (1 / array.size)
+  array.reduce(:*).abs ** (1.0 / array.size)
 end
 
 # True individual values
