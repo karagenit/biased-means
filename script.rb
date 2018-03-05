@@ -15,6 +15,11 @@ def misplacements(true_vals, sample_vals)
   count
 end
 
+# Returns a geometric mean of an array
+def geom_mean(array)
+  array.reduce(:*) ** (1 / array.size)
+end
+
 # True individual values
 true_individuals = []
 
@@ -35,6 +40,7 @@ true_order = true_individuals.sort_by { |ind| ind[:mean] }
 
 # How many misplacements occur using different sorting methods
 mean_rank_misplacements = []
+geom_mean_misplacements = []
 biased_mean_misplacements = []
 
 (0..TRIALS).each do |trial|
@@ -47,7 +53,7 @@ biased_mean_misplacements = []
   # Generate random sampling values based on true mean/SD
   (0...INDIVIDUALS).each do |i|
     set = gaussian_set(true_individuals[i][:mean], true_individuals[i][:sd], Random.rand * 90 + 10)
-    sample_individuals[i] = { index: i, mean: set.mean, sd: set.standard_deviation, n: set.length }
+    sample_individuals[i] = { index: i, mean: set.mean, sd: set.standard_deviation, n: set.length, geom: geom_mean(set) }
   end
 
   # Generate estimated population (pooled) values based on sample values
@@ -59,6 +65,10 @@ biased_mean_misplacements = []
   # Rank simply by mean, find # of misplacements
   mean_rank_order = sample_individuals.sort_by { |ind| ind[:mean] }
   mean_rank_misplacements.push misplacements(true_order, mean_rank_order)
+
+  # Rank by geometric means
+  geom_mean_order = sample_individuals.sort_by { |ind| ind[:geom] }
+  geom_mean_misplacements.push misplacements(true_order, geom_mean_order)
 
   # Rank by biased mean method (pulls towards pooled mean based on deviation)
   biased_mean_order = sample_individuals.sort_by do |ind|
@@ -77,4 +87,5 @@ end
 
 puts ""
 puts mean_rank_misplacements.mean
+puts geom_mean_misplacements.mean
 puts biased_mean_misplacements.mean
