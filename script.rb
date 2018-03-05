@@ -4,6 +4,7 @@ require_relative 'gaussian.rb'
 require 'descriptive_statistics'
 
 INDIVIDUALS=50
+TRIALS=5000
 
 # Returns the number of incorrectly sorted individuals
 def misplacements(true_vals, sample_vals)
@@ -36,9 +37,9 @@ true_order = true_individuals.sort_by { |ind| ind[:mean] }
 mean_rank_misplacements = []
 biased_mean_misplacements = []
 
-(0..1000).each do |trial|
+(0..TRIALS).each do |trial|
 
-  print "Progress: #{ (100 * trial / 1000).round }%     \r"
+  print "Progress: #{ (100 * trial / TRIALS).round }%     \r"
 
   # Sampled values from each individual
   sample_individuals = []
